@@ -4,7 +4,7 @@ from pandas import DataFrame
 # Connect to the Bitpoloito node using RPC credentials.
 rpc_user = 'bitcoin'
 rpc_password = 'bitcoin'
-rpc_port = '38332'
+rpc_port = '38333'
 rpc_connection = AuthServiceProxy(
     f'http://{rpc_user}:{rpc_password}@localhost:{rpc_port}')
 

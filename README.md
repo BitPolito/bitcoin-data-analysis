@@ -28,10 +28,11 @@ Example usage:
 ```python
 from bitcoinrpc.authproxy import AuthServiceProxy
 
-rpc_user = 'your_rpc_username'
-rpc_password = 'your_rpc_password'
-rpc_ip = 'your_rpc_ip_address'
-rpc_connection = AuthServiceProxy(f'http://{rpc_user}:{rpc_password}@{rpc_ip}:38332')  #Port number here should be inserted
+rpc_user = 'bitcoin'
+rpc_password = 'bitcoin'
+rpc_port = '38333' #Signet portNumber
+rpc_connection = AuthServiceProxy(
+    f'http://{rpc_user}:{rpc_password}@localhost:{rpc_port}')
 ```
 
 
@@ -44,6 +45,7 @@ Example usage:
 current_height = rpc_connection.getblockcount()
 ```
 
+
 **getblockhash**
 
 This method of the 'AuthServiceProxy' class takes a block height as an argument and returns the hash of the corresponding block.
@@ -52,6 +54,7 @@ Example usage:
 ```python
 block_hash = rpc_connection.getblockhash(height)
 ```
+
 
 **getblock**
 
@@ -62,6 +65,7 @@ Example usage:
 block = rpc_connection.getblock(block_hash)
 ```
 
+
 **getrawtransaction**
 
 This method of the AuthServiceProxy class takes a transaction ID as an argument and returns information about the corresponding transaction.
@@ -70,6 +74,7 @@ Example usage:
 ```python
 coinbase_tx = rpc_connection.getrawtransaction(block['tx'][0], 1)
 ```
+
 
 **DataFrame**
 
@@ -80,8 +85,7 @@ Example usage:
 block_df = DataFrame(block_data)
 ```
 
-**pandas.DataFrame.append
-**
+**pandas.DataFrame.append**
 
 This method of the DataFrame class appends rows to an existing dataframe. It takes a dictionary of data as an argument.
 
@@ -90,8 +94,7 @@ Example usage:
 block_df = block_df.append(block_data, ignore_index=True)
 ```
 
-**pandas.DataFrame.apply
-**
+**pandas.DataFrame.apply**
 
 This method of the DataFrame class applies a function to a dataframe or a column of a dataframe. It takes a function as an argument.
 
