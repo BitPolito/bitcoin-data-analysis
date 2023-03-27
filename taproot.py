@@ -5,8 +5,9 @@ import matplotlib.pyplot as plt
 # Connect to the BITPoliTO node using RPC credentials.
 rpc_user = 'bitcoin'
 rpc_password = 'bitcoin'
+rpc_host = '127.0.0.1'
 rpc_port = '8332'
-rpc_connection = AuthServiceProxy(f'http://{rpc_user}:{rpc_password}@localhost:{rpc_port}')
+rpc_connection = AuthServiceProxy("http://%s:%s@%s:%s"%(rpc_user, rpc_password, rpc_host, rpc_port), timeout=120)
 
 # Define the taproot activation height
 taproot_activation_height = 709632
