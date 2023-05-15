@@ -1,7 +1,0 @@
-streamlit
-plotly == 5.14.1
-pandas
-requests
-datetime
-Pillow
-matplotlib
