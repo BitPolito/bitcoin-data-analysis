@@ -115,7 +115,6 @@ def get_blockchaincom_data(url, col):
     df = df.sort_values(by="Date", ascending=False)
     return df 
 
-@st.cache_data
 def load_heavy_data():
     # Get historical BTC address data from Blockchain.com
     addr_url = 'https://api.blockchain.info/charts/n-unique-addresses?timespan=all&format=json'
@@ -155,7 +154,7 @@ with col2:
     # metric for current hashrate
     current_hash = round(hash_df.iloc[0]['Hash']/10**9, 2)
     delta = round((hash_df.iloc[0]['Hash'] - hash_df.iloc[1]['Hash'])/10**9, 2)
-    col2.metric(label="Hash rate attuale", value=f'{current_hash} TH/s', delta=f'{delta} TH/s')
+    col2.metric(label="Hash rate attuale", value=f'{current_hash} TH/s', delta=f'{delta} TH/s rispetto a 3 giorni fa')
     st.divider()
     # metric for current fees
     st.write("Commissioni (in sat/vB) per includere una transazione in ...")
