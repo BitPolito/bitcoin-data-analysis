@@ -1,12 +1,8 @@
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 import pandas as pd
 import base64
+from bitcoin_rpc import BitcoinRPC
 
-# Connect to your Bitcoin Core node via RPC
-rpc_user = 'bitcoin'
-rpc_password = 'bitcoin'
-rpc_port = '38332'
-rpc_connection = AuthServiceProxy(f'http://{rpc_user}:{rpc_password}@localhost:{rpc_port}')
 
 # Create a DataFrame
 
