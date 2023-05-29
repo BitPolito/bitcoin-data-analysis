@@ -11,4 +11,4 @@ RUN poetry install  --no-dev --no-root
 COPY . .
 EXPOSE 8501
 
-CMD ["poetry", "run", "python", "-m", "bitdata"]
+CMD ["poetry", "run", "streamlit", "run", "frontend/main.py"]

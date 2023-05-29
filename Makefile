@@ -41,3 +41,19 @@ upload:
 	make clean
 	python setup.py sdist bdist_wheel
 	twine upload --repository pypi dist/*
+
+docker-build:
+	docker build -t bitdata .
+
+
+docker-run:
+	docker run -p 8501:8501 -v ./frontend:/app/frontend bitdata
+
+docker-stop:
+	-docker stop bitdata
+	-docker rm bitdata
+
+docker:
+	-make docker-stop
+	-make docker-build
+	-make docker-run
