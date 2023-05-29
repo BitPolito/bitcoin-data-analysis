@@ -1,3 +1,17 @@
+## TODO:
+
+- [ ] Readme intro, description, and usage, installation, etc.
+- [ ] Refactor repo
+- [ ] Merge di streamlit 
+- [ ] Pagine con grafici specifici per ogni analisi (es. mining, taporoot, lightning-channel, etc.)
+- [ ] Deploy to streamlit su nodo umbrel (o altro)
+- [ ] Analisi transazioni di chiusura Lightning Network
+- [ ] Jupyter notebooks per analisi specifiche
+- [ ] Analisi rete Lightning (grafo, etc.)
+- [ ] Dump di dati su file csv, cache e da far scaricare 
+- [ ] Collegare api di Amboss, etc per dati aggiuntivi
+- [ ] Aggiungere pulsante donazioni
+
 # bitcoin-data-analisys
 
 This Python code allows for the analysis of taproot transactions on the Bitcoin blockchain. It uses the bitcoinrpc library to connect to a local Bitcoin node via RPC credentials, and then retrieves and analyzes block data to determine the number of taproot transactions. The code continuously runs in the background, checking for new blocks and updating the plot accordingly.
