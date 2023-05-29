@@ -37,7 +37,7 @@ def mining_analytics(rpc_manager: BitcoinRPC, past_blocks: int = 10):
                 "Height": height,
                 "Timestamp": block["time"],
                 "Transaction Count": len(block["tx"]),
-                "BTC Fees": block["fee"],
+                "BTC Fees": block.get("fee", 0),
                 "Size (MB)": block["size"] / 1000000,
                 "Branch ID": "Orphan" if block["confirmations"] == 0 else "Main",
                 "Coinbase Transaction": coinbase_tx,
@@ -88,7 +88,12 @@ def mining_analytics(rpc_manager: BitcoinRPC, past_blocks: int = 10):
     # Create a pandas dataframe with the block data.
     block_df = pd.DataFrame(block_data)
 
-    # Print the resulting dataframe.
-    print(block_df)
-
     return block_df
+
+if __name__ == "__main__":
+    from ..core.config import BitConfig
+    cfg = BitConfig()
+    rpc_manager = BitcoinRPC(cfg)
+    df = mining_analytics(rpc_manager, 10)
+    # Print the resulting dataframe.
+    print(df)

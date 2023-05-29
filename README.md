@@ -69,8 +69,9 @@ Access the [streamlit](https://streamlit.io/) web page in your browser at http:/
 Currently, it supports the BitcoinRPC and Blockstream API, as providers for on-chain data.
 
 ### Config
-Add your own configuration file in the root folder of the project. You can use the .env.example file as a template.
-
+Add your own configuration file in the root folder of the project. 
+You can use the .env.example file as a template.
+Currently BitcoinRPC config 
 ```bash
 mv .env.example .env
 # edit .env file
@@ -78,10 +79,21 @@ vim .env
 ```
 
 ### Analysis
-- Taproot transaction count 
+
 - Mining pool distribution
+```bash
+    poetry run python -m bitdata.analysis.mining
+```
+
 - Transactions per block
+```bash
+    poetry run python -m bitdata.analysis.addresses
+```
   
+- Taproot transaction count 
+```bash
+    poetry run python -m bitdata.analysis.taproot
+```
 
 ## Contributing
 

@@ -16,6 +16,7 @@ pydantic = {extras = ["dotenv"], version = "^1.10.8"}
 plotly = "^5.14.1"
 Pillow = "^9.5.0"
 matplotlib = "^3.7.1"
+tqdm = "^4.65.0"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.971"

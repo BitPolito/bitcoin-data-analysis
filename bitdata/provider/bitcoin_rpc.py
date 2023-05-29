@@ -1,7 +1,8 @@
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 from ..core.config import BitConfig
 from loguru import logger
-
+from tqdm import tqdm
+from time import sleep
 
 class BitcoinRPC:
     def __init__(self, cfg: BitConfig):
@@ -31,7 +32,6 @@ class BitcoinRPC:
         return block_time
 
     def get_transaction(self, txid: str):
-        logger.info(f"Getting transaction {txid}")
         return self.rpc_conn.getrawtransaction(txid, True)
 
     def address_block_analytics(self, block: dict):
@@ -39,7 +39,7 @@ class BitcoinRPC:
         address_types_count = {}
         address_types_amount = {}
 
-        for txid in block["tx"]:
+        for txid in tqdm(block["tx"]):
             tx = self.get_transaction(txid)
             for output in tx["vout"]:
                 address_type = output["scriptPubKey"]["type"]
@@ -49,6 +49,7 @@ class BitcoinRPC:
                 address_types_amount[address_type] = (
                     address_types_amount.get(address_type, 0) + output["value"]
                 )
+            
         return {
             "address_types_count": address_types_count,
             "address_types_amount": address_types_amount,
