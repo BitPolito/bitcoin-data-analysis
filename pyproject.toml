@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "bitdata"
+version = "0.1.0"
+description = "Tools for analyzing data on Bitcoin and Lightning Network"
+authors = ["waltermaffy <walterm21@proton.me>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.31.0"
+python-bitcoinrpc = "^1.0"
+pandas = "^2.0.2"
+loguru = "^0.7.0"
+streamlit = "^1.22.0"
+pydantic = {extras = ["dotenv"], version = "^1.10.8"}
+plotly = "^5.14.1"
+Pillow = "^9.5.0"
+matplotlib = "^3.7.1"
+tqdm = "^4.65.0"
+
+[tool.poetry.dev-dependencies]
+mypy = "^0.971"
+black = {version = "^22.8.0", allow-prereleases = true}
+isort = "^5.10.1"
+pytest-cov = "^4.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
