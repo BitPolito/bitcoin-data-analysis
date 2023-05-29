@@ -1,147 +1,104 @@
-## TODO:
+# Bitcoin Data Analysis
 
-- [ ] Readme intro, description, and usage, installation, etc.
-- [ ] Refactor repo
-- [ ] Merge di streamlit 
-- [ ] Pagine con grafici specifici per ogni analisi (es. mining, taporoot, lightning-channel, etc.)
-- [ ] Deploy to streamlit su nodo umbrel (o altro)
-- [ ] Analisi transazioni di chiusura Lightning Network
-- [ ] Jupyter notebooks per analisi specifiche
-- [ ] Analisi rete Lightning (grafo, etc.)
-- [ ] Dump di dati su file csv, cache e da far scaricare 
-- [ ] Collegare api di Amboss, etc per dati aggiuntivi
-- [ ] Aggiungere pulsante donazioni
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/your-username/bitcoin-data-analysis/blob/main/LICENSE)
 
+## Overview
 
-streamlit
-plotly == 5.14.1
-pandas
-requests
-datetime
-Pillow
-matplotlib
+The Bitcoin Data Analysis is a Python library designed to facilitate the analysis of Bitcoin on-chain data and Lightning Network data. It provides various functionalities and data providers to retrieve, process, and analyze Bitcoin-related information.
 
-# bitcoin-data-analisys
+The library consists of the following components:
 
-This Python code allows for the analysis of taproot transactions on the Bitcoin blockchain. It uses the bitcoinrpc library to connect to a local Bitcoin node via RPC credentials, and then retrieves and analyzes block data to determine the number of taproot transactions. The code continuously runs in the background, checking for new blocks and updating the plot accordingly.
-
-To use this code, a Bitcoin node running locally and RPC credentials set up are needed. bitcoinrpc and matplotlib libraries installed are necessary too.
-
-The plot shows the number of taproot transactions on the y-axis and the block height on the x-axis. The plot updates in real-time as new blocks are added to the blockchain, showing the trend in taproot transactions over time.
-
-Overall, this code provides a useful tool for analyzing the adoption and usage of taproot transactions on the Bitcoin blockchain.
+- **bitdata**: This module contains different providers to fetch Bitcoin data and some functions to help analysis.
+- **dashboard**: This folder contains a Streamlit web page for visualizing and interacting with the analyzed data.
 
 
-### Extracting Data for the Last 10 Blocks
+## Data Dashboard
 
-This Python script extracts data for the last 10 blocks of the Bitcoin blockchain using the 'bitcoinrpc' library and stores it in a pandas dataframe. The extracted data includes the following fields for each block:
-
--  Height
--  Timestamp
--   Transaction Count
--    BTC Fees
--    Size in MB
--    Branch ID
--    Coinbase Transaction
--    OP_RETURN
-
-The script then maps the 'OP_RETURN' value to a specific mining operation and adds it to the block data before creating the pandas dataframe.
-
-### Library and Methods Used
-The following libraries ad methods are used in the script:
-
-**AuthServiceProxy**
-
-This is a class from the 'bitcoinrpc' library that provides an interface for communicating with a Bitcoin Core node via JSON-RPC. It takes three arguments:
-
-    'rpc_user': The username for accessing the RPC interface of the Bitcoin Core node.
-    'rpc_password': The password for accessing the RPC interface of the Bitcoin Core node.
-    'rpc_ip': The IP address of the Bitcoin Core node.
-
-Example usage:
-```python
-from bitcoinrpc.authproxy import AuthServiceProxy
-
-rpc_user = 'bitcoin'
-rpc_password = 'bitcoin'
-rpc_port = '38333' #Signet portNumber
-rpc_connection = AuthServiceProxy(
-    f'http://{rpc_user}:{rpc_password}@localhost:{rpc_port}')
-```
-
-
-**getblockcount**
-
-This method of the 'AuthServiceProxy' class returns the current block height of the Bitcoin blockchain.
-
-Example usage:
-```python
-current_height = rpc_connection.getblockcount()
-```
-
-
-**getblockhash**
-
-This method of the 'AuthServiceProxy' class takes a block height as an argument and returns the hash of the corresponding block.
-
-Example usage:
-```python
-block_hash = rpc_connection.getblockhash(height)
-```
-
-
-**getblock**
-
-This method of the AuthServiceProxy class takes a block hash as an argument and returns information about the corresponding block.
-
-Example usage:
-```python
-block = rpc_connection.getblock(block_hash)
-```
-
-
-**getrawtransaction**
-
-This method of the AuthServiceProxy class takes a transaction ID as an argument and returns information about the corresponding transaction.
-
-Example usage:
-```python
-coinbase_tx = rpc_connection.getrawtransaction(block['tx'][0], 1)
-```
-
-
-**DataFrame**
-
-This is a class from the pandas library that provides a data structure for storing tabular data in memory. It takes a dictionary of data and column labels as arguments.
-
-Example usage:
-```python
-block_df = DataFrame(block_data)
-```
-
-**pandas.DataFrame.append**
-
-This method of the DataFrame class appends rows to an existing dataframe. It takes a dictionary of data as an argument.
-
-Example usage:
-```python
-block_df = block_df.append(block_data, ignore_index=True)
-```
-
-**pandas.DataFrame.apply**
-
-This method of the DataFrame class applies a function to a dataframe or a column of a dataframe. It takes a function as an argument.
-
-Example usage:
-```python
-block_df['Mining Operation'] = block_df['OP_RETURN'].apply(lambda x: mining_ops[x] if x in mining_ops else 'Unknown')
-```
-
-
-# Data-Analysis
 Webpage built with streamlit, that displays some live statistics about bitcoin network. Try it [here](https://bumblebee00-data-analysis-on-chain-kk5uep.streamlit.app/)
 
-Sources: 
+
+### Installation
+
+There are different ways to install the library.
+
+<!-- ### Pip
+
+1. Install the library from PyPI:
+
+```bash
+    pip install bitdata
+``` -->
+
+
+Clone the repository:
+   
+```bash
+    git clone https://github.com/BitPolito/bitcoin-data-analysis
+    cd bitcoin-data-analysis
+```
+
+#### Docker
+If you don't have Docker installed, you can follow the instructions [here](https://docs.docker.com/get-docker/).
+
+Build and run the docker image with:
+
+```bash
+    make docker 
+```
+Access the [streamlit](https://streamlit.io/) web page in your browser at http://localhost:8501.
+
+#### Poetry
+If you don't have poetry installed, follow the instructions in the [official Poetry documentation](https://python-poetry.org/docs/#installation) to install Poetry for your operating system.
+
+
+Install python libraries
+```
+    poetry install
+```
+
+Run the web page with:
+```
+    poetry run streamlit run frontend/On-chain.py
+```
+
+Access the [streamlit](https://streamlit.io/) web page in your browser at http://localhost:8501.
+
+
+## BitData - Analysis
+
+Currently, it supports the BitcoinRPC and Blockstream API, as providers for on-chain data.
+
+### Config
+Add your own configuration file in the root folder of the project. You can use the .env.example file as a template.
+
+```bash
+mv .env.example .env
+# edit .env file
+vim .env
+```
+
+### Analysis
+- Taproot transaction count 
+- Mining pool distribution
+- Transactions per block
+  
+
+## Contributing
+
+Contributions to the Bitcoin Data Analysis Library are welcome! If you encounter any issues, have feature suggestions, or would like to contribute code, feel free to open an issue or submit a pull request.
+
+<!-- Please ensure that your contributions align with the project's coding style and follow the guidelines specified in the CONTRIBUTING.md file. -->
+
+## License
+
+The Bitcoin Data Analysis Library is open source and released under the [MIT License](https://github.com/your-username/bitcoin-data-analysis/blob/main/LICENSE).
+
+
+## Acknowledgements
+We would like to acknowledge the following resources and libraries that have contributed to the development of this project:
+
 [bitnodes.io](https://bitnodes.io/)
 [blockchain.info](https://www.blockchain.info)
 [bloackstream.info](https://blockstream.info)
+
+

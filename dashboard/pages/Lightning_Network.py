@@ -15,7 +15,7 @@ for i in range(12):
     col[i].image(logos[i], width=50)
 
 # TODO: add something useful
-file_ = open("frontend/lightning.gif", "rb")
+file_ = open("dashboard/lightning.gif", "rb")
 contents = file_.read()
 data_url = base64.b64encode(contents).decode("utf-8")
 file_.close()

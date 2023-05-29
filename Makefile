@@ -45,7 +45,6 @@ upload:
 docker-build:
 	docker build -t bitdata .
 
-
 docker-run:
 	docker run -p 8501:8501 -v ./frontend:/app/frontend bitdata
 
