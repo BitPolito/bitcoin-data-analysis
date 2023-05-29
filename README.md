@@ -58,7 +58,7 @@ Install python libraries
 
 Run the web page with:
 ```
-    poetry run streamlit run frontend/On-chain.py
+    poetry run streamlit run dashboard/On-chain.py
 ```
 
 Access the [streamlit](https://streamlit.io/) web page in your browser at http://localhost:8501.
