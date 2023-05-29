@@ -12,6 +12,15 @@
 - [ ] Collegare api di Amboss, etc per dati aggiuntivi
 - [ ] Aggiungere pulsante donazioni
 
+
+streamlit
+plotly == 5.14.1
+pandas
+requests
+datetime
+Pillow
+matplotlib
+
 # bitcoin-data-analisys
 
 This Python code allows for the analysis of taproot transactions on the Bitcoin blockchain. It uses the bitcoinrpc library to connect to a local Bitcoin node via RPC credentials, and then retrieves and analyzes block data to determine the number of taproot transactions. The code continuously runs in the background, checking for new blocks and updating the plot accordingly.
@@ -129,3 +138,10 @@ block_df['Mining Operation'] = block_df['OP_RETURN'].apply(lambda x: mining_ops[
 ```
 
 
+# Data-Analysis
+Webpage built with streamlit, that displays some live statistics about bitcoin network. Try it [here](https://bumblebee00-data-analysis-on-chain-kk5uep.streamlit.app/)
+
+Sources: 
+[bitnodes.io](https://bitnodes.io/)
+[blockchain.info](https://www.blockchain.info)
+[bloackstream.info](https://blockstream.info)
