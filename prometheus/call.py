@@ -1,42 +1,31 @@
 #!/usr/bin/python3
-import os
+from prometheus_client import start_http_server
+import prometheus_client as prom
 import time
 import json
 
-from prometheus_client import start_http_server, Gauge, Counter
+import os
 
-#Easy way to extract data from node with bitcoin-cli
-#not using bitcoin-cli command cuz in next umbrel version should be deprecated
-#TODO
-#1) Implement subprocess
-#2) Format data to json
-#3) Try to make some manipulation on data (avg between block mining?)
+PORT = 9000
 
 BITCOIN_INTERFACE = "../umbrel/scripts/app compose bitcoin exec bitcoind bitcoin-cli"
 
-BITCOIN_BLOCKS = Gauge('bitcoin_blocks', 'Block height')
+#Metrics
+BITCOIN_BLOCKS = prom.Gauge('bitcoin_blocks', 'Bitcoin blocks count')
+BITCOIN_DIFFICULTY = prom.Gauge('blockchain_stats_difficulty', 'Bitcoin blockchain current difficulty')
 
 def request(command):
     request = BITCOIN_INTERFACE + " " + command
     run = os.popen(request)
     response = run.read()
-    #print(response)
     return json.loads(response)
 
-def main():
-    start_http_server(9000)
+if __name__ == '__main__':
+    start_http_server(PORT)
+    print("server started on port: " + str(PORT))
+
     while True:
         info = request("getmininginfo")
         BITCOIN_BLOCKS.set(info['blocks'])
-        print(info['blocks'])
-        #request("getblockcount")
-        #request("getdifficulty")
-        t = time.localtime()
-        current_time = time.strftime("%H:%M:%S", t)
-        print(current_time)
-        #print(test)
-
-        #time.sleep(300)
-
-if __name__ == '__main__':
-    main()
+        BITCOIN_DIFFICULTY.set(info['difficulty'])
+        time.sleep(1)
