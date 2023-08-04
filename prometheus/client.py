@@ -12,6 +12,7 @@ import json
 import os
 
 PORT = 9000
+DEBUG = 1
 
 BITCOIN_INTERFACE = "~/umbrel/scripts/app compose bitcoin exec bitcoind bitcoin-cli"
 
@@ -91,33 +92,42 @@ if __name__ == '__main__':
         # txstats = bitcoinrpc("getchaintxstats")
 
         uptime = request("uptime")
-        print("uptime: ", uptime)
-        print("\n")
+        if DEBUG:
+            print("uptime: ", uptime)
+            print("\n")
         meminfo = request("getmemoryinfo")
         meminfo = meminfo["locked"]
-        print("meminfo: ", meminfo)
-        print("\n")
+        if DEBUG:
+            print("meminfo: ", meminfo)
+            print("\n")
         blockchaininfo = request("getblockchaininfo")
-        print("blockchaininfo: ", blockchaininfo)
-        print("\n")
+        if DEBUG:
+            print("blockchaininfo: ", blockchaininfo)
+            print("\n")
         networkinfo = request ("getnetworkinfo")
-        print("networkinfo: ", networkinfo)
-        print("\n")
+        if DEBUG:
+            print("networkinfo: ", networkinfo)
+            print("\n")
         chaintips = request("getchaintips")
-        print("chaintips: ", chaintips)
-        print("\n")
+        if DEBUG:
+            print("chaintips: ", chaintips)
+            print("\n")
         mempool = request("getmempoolinfo")
-        print("mempool: ",mempool)
-        print("\n")
+        if DEBUG:
+            print("mempool: ",mempool)
+            print("\n")
         nettotals = request("getnettotals")
-        print("nettotals: ", nettotals)
-        print("\n")
+        if DEBUG:
+            print("nettotals: ", nettotals)
+            print("\n")
         txstats = request("getchaintxstats")
-        print("txstats: ", txstats)
-        print("\n")
+        if DEBUG:
+            print("txstats: ", txstats)
+            print("\n")
         banned = request("listbanned") #Should be empty now :)
-        print("Banned: ", banned)
-        print("\n")
+        if DEBUG:
+            print("Banned: ", banned)
+            print("\n")
 
         #Extract sub-object
         UP_TIME.set(int(uptime)) #Bitcoin node uptime (from last reboot)
