@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 #TODO
-# Implement subprocess                                                  (Priority: High)
+# Implement subprocess                                                  (Priority: High) --> not needed if used BITCOIN_CLI = 0, fast enough
 # Impelement signal handler (ex. ctlr+cv to exit process gratefully)    (Priority: Low)
 
 from prometheus_client import start_http_server
@@ -9,10 +9,19 @@ import prometheus_client as prom
 import time
 import json
 
+from bitcoin.rpc import Proxy
+from typing import Union
+from typing import Dict
+from typing import Any
+from typing import List
+from btc_conf import *
+
 import os
 
 PORT = 9000
-DEBUG = 1
+DEBUG = 0
+BITCOIN_CLI = 0
+
 
 BITCOIN_INTERFACE = "~/umbrel/scripts/app compose bitcoin exec bitcoind bitcoin-cli"
 
@@ -56,22 +65,39 @@ latest_block_hash = transactionId = block_transactions = block_number = 0
 getblockhash_string = "getblockhash"
 getrawtransaction_string = "getrawtransaction"
 
+def rpc_client_slave():
+    use_conf = ((CONF_PATH is not None) or (RPC_USER is None) or (RPC_PASSWORD is None))
+    if use_conf:
+        return lambda: Proxy(btc_conf_file=CONF_PATH, timeout=TIMEOUT)
+    else:
+        host = RPC_HOST
+        host = "{}:{}@{}".format(RPC_USER, RPC_PASSWORD, host)
+        if RPC_PORT:
+            host = "{}:{}".format(host, RPC_PORT)
+        service_url = "{}://{}".format(RPC_SCHEME, host)
+        return lambda: Proxy(service_url=service_url, timeout=TIMEOUT)
+
+
+def rpc_client_master():
+    return rpc_client_slave()()
+
+
+def bitcoinrpc(*args):
+    result = rpc_client_master().call(*args)
+    return result
+
+
+
 def request(command):
     NUMBER_OF_REQUESTS.inc()
-    request = BITCOIN_INTERFACE + " " + command
-    run = os.popen(request)
-    response = run.read()
-    #print(response)
-    if getblockhash_string in command:
-        global latest_block_hash
-        latest_block_hash = response
-        return 0
-    elif getrawtransaction_string in command:
-        global transactionId
-        transactionId = response
-        return 0
+    if BITCOIN_CLI:
+        request = BITCOIN_INTERFACE + " " + command
+        run = os.popen(request)
+        response = run.read()
+        respons = json.loads(response)
     else:
-        return json.loads(response)
+        response = bitcoinrpc(command)
+    return response
 
 if __name__ == '__main__':
     start_http_server(PORT)
@@ -79,18 +105,7 @@ if __name__ == '__main__':
 
     while True:
 
-        #Main info object
-
-        # uptime = int(bitcoinrpc("uptime"))
-        # meminfo = bitcoinrpc("getmemoryinfo", "stats")["locked"]
-        # blockchaininfo = bitcoinrpc("getblockchaininfo")
-        # networkinfo = bitcoinrpc("getnetworkinfo")
-        # chaintips = len(bitcoinrpc("getchaintips"))
-        # mempool = bitcoinrpc("getmempoolinfo")
-        # nettotals = bitcoinrpc("getnettotals")
-        # rpcinfo = bitcoinrpc("getrpcinfo")
-        # txstats = bitcoinrpc("getchaintxstats")
-
+        #Main object
         uptime = request("uptime")
         if DEBUG:
             print("uptime: ", uptime)
@@ -170,58 +185,5 @@ if __name__ == '__main__':
 
         TOTAL_BYTES_RECV.set(nettotals["totalbytesrecv"])
         TOTAL_BYTES_SENT.set(nettotals["totalbytessent"])
-
-
-
-
-
-
-
-        # network = request("getnetworkinfo")
-        # SERVER_VERSION.set(network['version'])
-        # PROTOCOL_VERSION.set(network['protocolversion'])
-
-        # blockchain = request("getblockchaininfo")
-        # #print(blockchain)
-        # SIZE.set((blockchain['size_on_disk']/(1000*1000*1000))) #GigaBytes
-
-        # UP_TIME.set(int(request("uptime")))
-
-        # CHAIN_NUM.set(len(request("getchaintips")))
-
-        # info = request("getrpcinfo")
-        # print(info)
-
-        
-        # info = request("getmininginfo")
-        # blocks = info['blocks']
-        # BITCOIN_BLOCKS.set(blocks)
-        # BITCOIN_DIFFICULTY.set(info['difficulty'])
-        # info = request("getconnectioncount")
-        # BITCOIN_CONNECTIONS.set(info)
-        # #blocks = 799804
-        # info = request("getblockhash " + str(blocks))
-        # info = request("getblock " + latest_block_hash)
-        # transactions = info['tx']
-        # if blocks != block_number:
-        #     #print(transactions[0])
-        #     info = request("getrawtransaction " + str(transactions[0]))
-        #     info = request("decoderawtransaction " + str(transactionId))
-        #     print(info)
-        # else:
-        #     print("Already processed")
-
-
-        # LATEST_BLOCK_NONCE.set(info['nonce'])
-        # LATEST_BLOCK_TRANSACTIONS.set(info['nTx'])
-        # LATEST_BLOCK_SIZE.set(info['size'])
-        # print("Numero transazioni --> " + str(info['nTx']))
-        #exit(0)
-        # info = request("getrawtransaction 42ea59fcd6c686f165345bc441ce3ec0433fa7673342455772cdc5b882895277")
-        # info = request("decoderawtransaction " + str(transactionId))
-        # print(info)
-
-
-
 
         time.sleep(10)
