@@ -6,6 +6,18 @@ services:
     networks:
       - umbrel_main_network
 
+  prometheus:
+    build: prometheus/.
+    ports:
+      - "9090:9090"
+    networks:
+      - umbrel_main_network
+
+  grafana:
+    build: grafana/.
+    ports:
+      - "11000:11000"
+
 networks:
   umbrel_main_network:
     name: umbrel_main_network
