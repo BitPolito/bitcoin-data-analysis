@@ -16,6 +16,9 @@ from typing import Any
 from typing import List
 from btc_conf import *
 
+
+import socket
+
 import os
 
 PORT = 9000
@@ -41,8 +44,8 @@ PEERS = prom.Gauge('node_peers', 'Number of peers connected to the btc node')
 DIFFICULTY = prom.Gauge('blockchain_stats_difficulty', 'Bitcoin blockchain current difficulty')
 CONNECTION_IN = prom.Gauge('connections_in', 'connections in to node')
 CONNECTION_OUT = prom.Gauge('connections_out', 'connections outgoing from node')
-BAN_CREATED = prom.Gauge("bitcoin_ban_created", "Time the ban was created", labelnames=["address", "reason"])
-BANNED_UNTIL = prom.Gauge("bitcoin_banned_until", "Time the ban expires", labelnames=["address", "reason"])
+BAN_CREATED = prom.Gauge("ban_created", "Time the ban was created", labelnames=["address", "reason"])
+BANNED_UNTIL = prom.Gauge("banned_until", "Time the ban expires", labelnames=["address", "reason"])
 TXCOUNT = prom.Gauge('tx_count', 'total tx')
 NUM_CHAINTIPS = prom.Gauge('num_chains', 'number of chains on the node') #different from each node, orphan chains are not sync so it depends on sync time
 MEMINFO_USED = prom.Gauge("meminfo_used", "Number of bytes used")
@@ -60,10 +63,6 @@ MEMPOOL_UNBROADCAST = prom.Gauge("mempool_unbroadcast", "Number of transactions 
 TOTAL_BYTES_RECV = prom.Gauge("total_bytes_recv", "Total bytes received")
 TOTAL_BYTES_SENT = prom.Gauge("total_bytes_sent", "Total bytes sent")
 
-
-latest_block_hash = transactionId = block_transactions = block_number = 0
-getblockhash_string = "getblockhash"
-getrawtransaction_string = "getrawtransaction"
 
 def rpc_client_slave():
     use_conf = ((CONF_PATH is not None) or (RPC_USER is None) or (RPC_PASSWORD is None))
@@ -99,12 +98,28 @@ def request(command):
         response = bitcoinrpc(command)
     return response
 
+
+
+
+def tryPort(port):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    result = False
+    try:
+        sock.bind(("10.21.21.8", port))
+        result = True
+    except:
+        print("Port is in use")
+    sock.close()
+    return result
+
+
+
 if __name__ == '__main__':
     start_http_server(PORT)
-    print("server started on port: " + str(PORT))
-
+    if DEBUG: 
+        print("server started on port: " + str(PORT))
+        print(tryPort(8332))
     while True:
-
         #Main object
         uptime = request("uptime")
         if DEBUG:
