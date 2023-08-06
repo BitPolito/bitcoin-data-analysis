@@ -1,0 +1,12 @@
+services:
+  exporter:
+    build: .
+    ports:
+      - "9000:9000"
+    networks:
+      - umbrel_main_network
+
+networks:
+  umbrel_main_network:
+    name: umbrel_main_network
+    external: true
