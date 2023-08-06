@@ -1,6 +1,6 @@
 services:
   exporter:
-    build: .
+    build: exporter/.
     ports:
       - "9000:9000"
     networks:

@@ -1,7 +1,7 @@
 FROM python:3.9
 
-ADD client.py .
-ADD btc_conf.py .
+ADD exporter/client.py .
+ADD exporter/btc_conf.py .
 
 RUN pip install prometheus_client python-bitcoinlib
 
