@@ -17,8 +17,15 @@ services:
     build: grafana/.
     ports:
       - "11000:11000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
 
 networks:
   umbrel_main_network:
     name: umbrel_main_network
     external: true
+
+volumes:
+  grafana_data:
