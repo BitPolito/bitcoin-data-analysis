@@ -18,6 +18,7 @@ from btc_conf import *
 
 
 import socket
+import requests
 
 import os
 
@@ -105,7 +106,7 @@ def tryPort(port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     result = False
     try:
-        sock.bind(("10.21.21.8", port))
+        sock.bind((RPC_HOST, port))
         result = True
     except:
         print("Port is in use")
@@ -113,12 +114,26 @@ def tryPort(port):
     return result
 
 
+def wait_for_successful_connection(host,port):
+    while True:
+        try:
+            r = requests.get("http://" + host + ":" + port)
+            print("Connected")
+            return
+        except requests.exceptions.RequestException as e:
+            pass
+
+
 
 if __name__ == '__main__':
+    #time.sleep(240)
     start_http_server(PORT)
     if DEBUG: 
         print("server started on port: " + str(PORT))
         print(tryPort(8332))
+        wait_for_successful_connection(RPC_HOST, RPC_PORT)
+
+
     while True:
         #Main object
         uptime = request("uptime")
