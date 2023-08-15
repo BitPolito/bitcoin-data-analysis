@@ -1,0 +1,34 @@
+services:
+  exporter:
+    build: exporter/.
+    ports:
+      - "9000:9000"
+    networks:
+      - umbrel_main_networ
+    restart: on-failure
+
+  prometheus:
+    build: prometheus/.
+    ports:
+      - "9090:9090"
+    networks:
+      - umbrel_main_network
+    restart: on-failure
+
+  grafana:
+    build: grafana/.
+    ports:
+      - "11000:11000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    restart: on-failure
+
+networks:
+  umbrel_main_network:
+    name: umbrel_main_network
+    external: true
+
+volumes:
+  grafana_data:
