@@ -216,4 +216,4 @@ if __name__ == '__main__':
         TOTAL_BYTES_RECV.set(nettotals["totalbytesrecv"])
         TOTAL_BYTES_SENT.set(nettotals["totalbytessent"])
 
-        time.sleep(10)
+        time.sleep(300)
