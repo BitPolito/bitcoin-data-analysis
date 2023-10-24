@@ -12,11 +12,6 @@ The library consists of the following components:
 - **dashboard**: This folder contains a Streamlit web page for visualizing and interacting with the analyzed data.
 
 
-## Data Dashboard
-
-Webpage built with streamlit, that displays some live statistics about bitcoin network. Try it [here](https://bumblebee00-data-analysis-on-chain-kk5uep.streamlit.app/)
-
-
 ### Installation
 
 There are different ways to install the library.
@@ -64,6 +59,17 @@ cp .env.example .env
 # edit .env file with your configuration
 nano .env
 ```
+## Data Dashboard
+
+Webpage built with streamlit, that displays some live statistics about bitcoin network. Try it [here](https://bumblebee00-data-analysis-on-chain-kk5uep.streamlit.app/)
+
+### Run the dashboard
+```
+    poetry run streamlit run dashboard/On-chain.py
+```
+
+Access the [streamlit](https://streamlit.io/) web page in your browser at http://localhost:8501.
+
 
 ## BitData - Analysis
 
@@ -79,13 +85,6 @@ Will continue to analyze new blocks every 30 seconds.
 ```
     poetry run python -m bitdata.analysis.coinbase -n testnet -t "Stratum v2" -p 10
 ```
-
-### BP/LNP Stats Dashboard
-```
-    poetry run streamlit run dashboard/On-chain.py
-```
-
-Access the [streamlit](https://streamlit.io/) web page in your browser at http://localhost:8501.
 
 
 ### Mining pool distribution
