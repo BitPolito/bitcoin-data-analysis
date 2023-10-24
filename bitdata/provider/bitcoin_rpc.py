@@ -31,6 +31,16 @@ class BitcoinRPC:
         logger.info(f"Getting last block height {block_time}")
         return block_time
 
+    def get_new_address(self):
+        try:
+            address = self.rpc_conn.getnewaddress()
+        except JSONRPCException:
+            logger.error("Unable to get new address")
+            return None
+
+        logger.info(f"Getting new address {address}")
+        return address
+
     def get_transaction(self, txid: str):
         return self.rpc_conn.getrawtransaction(txid, True)
 
