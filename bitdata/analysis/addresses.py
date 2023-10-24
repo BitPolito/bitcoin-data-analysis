@@ -24,6 +24,7 @@ def last_block_analytics(rpc_manager: BitcoinRPC):
 
 if __name__ == "__main__":
     from ..core.config import BitConfig
+
     cfg = BitConfig()
     rpc_manager = BitcoinRPC(cfg)
     last_block_analytics(rpc_manager)

@@ -55,8 +55,32 @@ Install python libraries
 ```
     poetry install
 ```
+### Config
+Add your own configuration file in the root folder of the project. 
+You can use the .env.example file as a template.
 
-Run the web page with:
+```bash
+cp .env.example .env
+# edit .env file with your configuration
+nano .env
+```
+
+## BitData - Analysis
+
+Some examples tools and script to analyze bitcoin data.
+
+### Coinbase String Monitor 
+This script analyze the coinbase of the last 10 blocks of the testnet, if it found the target string on the coinbase transaction will send a message in a telegram channel.
+Will continue to analyze new blocks every 30 seconds.
+
+- Change BOT_TOKEN and CHAT_ID in the .env file to enable the telegram bot
+- The bot should be added to the channel as an administrator. The CHAT_ID is the chat of the bot with the channel.
+
+```
+    poetry run python -m bitdata.analysis.coinbase -n testnet -t "Stratum v2" -p 10
+```
+
+### BP/LNP Stats Dashboard
 ```
     poetry run streamlit run dashboard/On-chain.py
 ```
@@ -64,33 +88,18 @@ Run the web page with:
 Access the [streamlit](https://streamlit.io/) web page in your browser at http://localhost:8501.
 
 
-## BitData - Analysis
+### Mining pool distribution
 
-Currently, it supports the BitcoinRPC and Blockstream API, as providers for on-chain data.
-
-### Config
-Add your own configuration file in the root folder of the project. 
-You can use the .env.example file as a template.
-Currently BitcoinRPC config 
-```bash
-mv .env.example .env
-# edit .env file
-vim .env
-```
-
-### Analysis
-
-- Mining pool distribution
 ```bash
     poetry run python -m bitdata.analysis.mining
 ```
 
-- Transactions per block
+### Transactions per block
 ```bash
     poetry run python -m bitdata.analysis.addresses
 ```
   
-- Taproot transaction count 
+### Taproot transaction count 
 ```bash
     poetry run python -m bitdata.analysis.taproot
 ```

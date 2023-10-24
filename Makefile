@@ -1,5 +1,5 @@
 frontend:
-	poetry run streamlit run page_streamlit.py
+	poetry run streamlit run dashboard/On-chain.py
 
 test:
 	pytest tests/
