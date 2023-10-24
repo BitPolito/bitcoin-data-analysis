@@ -1,4 +1,6 @@
 import requests
+
+
 # Class that use the Blockstream API to get the blockchain data to do analysis
 class BlockstreamProvider:
     def __init__(self, network="mainnet"):
@@ -13,7 +15,7 @@ class BlockstreamProvider:
 
     def get_last_height(self):
         return requests.get(f"{self.base_url}/blocks/tip/height").text
-    
+
     def last_hash(self):
         return requests.get(f"{self.base_url}/blocks/tip/hash").text
 
@@ -21,11 +23,14 @@ class BlockstreamProvider:
         result = requests.get(f"{self.base_url}/blocks/:{n}")
         print(f"{self.base_url}/blocks/:{n}")
         return self.parse_result(result)
-    
 
     def get_raw_coinbase_transaction(self, block_hash: str = ""):
-        coinbase_transaction_hash = requests.get(f"{self.base_url}/block/{block_hash}/txid/0").text
-        coinbase_transaction_raw = requests.get(f"{self.base_url}/tx/{coinbase_transaction_hash}/raw").text
+        coinbase_transaction_hash = requests.get(
+            f"{self.base_url}/block/{block_hash}/txid/0"
+        ).text
+        coinbase_transaction_raw = requests.get(
+            f"{self.base_url}/tx/{coinbase_transaction_hash}/raw"
+        ).text
         return coinbase_transaction_raw
 
     def parse_result(self, result):

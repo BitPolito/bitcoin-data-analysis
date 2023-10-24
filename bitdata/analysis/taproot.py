@@ -1,6 +1,7 @@
 import time
 
 import matplotlib.pyplot as plt
+
 from ..provider.bitcoin_rpc import BitcoinRPC
 
 # Define the taproot activation height
@@ -68,7 +69,8 @@ def taproot_counter(rpc_manager: BitcoinRPC):
 
 if __name__ == "__main__":
     from ..core.config import BitConfig
+
     cfg = BitConfig()
-   
+
     rpc_manager = BitcoinRPC(cfg)
     taproot_counter(rpc_manager)

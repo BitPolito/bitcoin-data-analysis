@@ -1,6 +1,7 @@
 import base64
 
 import pandas as pd
+
 from ..provider.bitcoin_rpc import BitcoinRPC
 
 
@@ -90,8 +91,10 @@ def mining_analytics(rpc_manager: BitcoinRPC, past_blocks: int = 10):
 
     return block_df
 
+
 if __name__ == "__main__":
     from ..core.config import BitConfig
+
     cfg = BitConfig()
     rpc_manager = BitcoinRPC(cfg)
     df = mining_analytics(rpc_manager, 10)

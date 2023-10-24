@@ -1,8 +1,11 @@
+from time import sleep
+
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
-from ..core.config import BitConfig
 from loguru import logger
 from tqdm import tqdm
-from time import sleep
+
+from ..core.config import BitConfig
+
 
 class BitcoinRPC:
     def __init__(self, cfg: BitConfig):
@@ -59,7 +62,7 @@ class BitcoinRPC:
                 address_types_amount[address_type] = (
                     address_types_amount.get(address_type, 0) + output["value"]
                 )
-            
+
         return {
             "address_types_count": address_types_count,
             "address_types_amount": address_types_amount,
