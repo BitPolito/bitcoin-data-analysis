@@ -2,6 +2,7 @@ import argparse
 import asyncio
 
 from bitdata.notifiers.telegram import TelegramWriter
+from bitdata.notifiers.discord import DiscordWriter
 from bitdata.provider.blockstream import BlockstreamProvider
 
 # This script will listen for new blocks and check if the coinbase transaction contains the string "Stratum v2"
@@ -10,18 +11,19 @@ from bitdata.provider.blockstream import BlockstreamProvider
 
 SLEEP_TIME = 30  # Time to wait in seconds between checks
 
-
 class CoinbaseAnalyzer:
     def __init__(
         self,
         provider,
         telegram_writer,
+        discord_writer,
         target_string,
         network="testnet",
         n_previous_blocks=0,
     ):
         self.provider = provider
         self.telegram_writer = telegram_writer
+        self.discord_writer = discord_writer
         self.target_string = target_string
         self.last_hash = None
         self.network = network
@@ -45,8 +47,9 @@ class CoinbaseAnalyzer:
             if self.network == "testnet"
             else "https://mempool.space/it/block/"
         )
-        message = f"""Found target string: **{self.target_string}** in {self.network} Block: [@{block_height}]({url}{block_hash})"""
+        message = f"""Found a new block from SRI Pool : **{self.target_string}** in {self.network} block: [@{block_height}]({url}{block_hash})"""
         await self.telegram_writer.send_telegram_message(message)
+        await self.discord_writer.send_discord_message(message)
 
     async def check_new_block(self):
         last_hash = self.provider.last_hash()
@@ -82,7 +85,6 @@ class CoinbaseAnalyzer:
             await self.check_new_block()
             await asyncio.sleep(SLEEP_TIME)  # Wait for 10 seconds before checking again
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Block Analyzer Script")
     parser.add_argument(
@@ -113,8 +115,9 @@ if __name__ == "__main__":
     n_previous_blocks = args.previous
     provider = BlockstreamProvider(network=network)
     telegram_writer = TelegramWriter()
+    discord_writer = DiscordWriter()
     coinbase_analyzer = CoinbaseAnalyzer(
-        provider, telegram_writer, target_string, network, n_previous_blocks
+        provider, telegram_writer, discord_writer, target_string, network, n_previous_blocks
     )
     loop = asyncio.get_event_loop()
     loop.run_until_complete(coinbase_analyzer.run())

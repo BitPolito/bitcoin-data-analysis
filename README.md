@@ -81,6 +81,8 @@ Will continue to analyze new blocks every 30 seconds.
 
 - Change BOT_TOKEN and CHAT_ID in the .env file to enable the telegram bot
 - The bot should be added to the channel as an administrator. The CHAT_ID is the chat of the bot with the channel.
+- Change DISCORD_WEBHOOK_URL in the .env file to enable the discord bot
+- The bot should be created as explained [here](https://discord.com/developers/docs/getting-started) and added with the right priviledges in the server. At this point the webhook url can be exctracted from the sub-channel that you want the bot will notify into.
 
 ```
     poetry run python -m bitdata.analysis.coinbase -n testnet -t "Stratum v2" -p 10
