@@ -1,9 +1,10 @@
 import argparse
 import asyncio
+import time
 
 from bitdata.notifiers.telegram import TelegramWriter
 from bitdata.notifiers.discord import DiscordWriter
-from bitdata.provider.blockstream import BlockstreamProvider
+from bitdata.provider.mempool import MempoolProvider
 
 # This script will listen for new blocks and check if the coinbase transaction contains the string "Stratum v2"
 # If it does, it will send a message to the Telegram channel
@@ -18,7 +19,7 @@ class CoinbaseAnalyzer:
         telegram_writer,
         discord_writer,
         target_string,
-        network="testnet",
+        network="testnet4",
         n_previous_blocks=0,
     ):
         self.provider = provider
@@ -43,8 +44,8 @@ class CoinbaseAnalyzer:
 
     async def notify_message(self, block_height, block_hash):
         url = (
-            "https://mempool.space/it/testnet/block/"
-            if self.network == "testnet"
+            "https://mempool.space/it/testnet4/block/"
+            if self.network == "testnet4"
             else "https://mempool.space/it/block/"
         )
         message = f"""Found a new block from SRI Pool : **{self.target_string}** in {self.network} block: [@{block_height}]({url}{block_hash})"""
@@ -70,6 +71,7 @@ class CoinbaseAnalyzer:
             return
         list_of_blocks = self.provider.get_last_n_blocks(self.n_previous_blocks)
         for block in list_of_blocks[: self.n_previous_blocks]:
+            #print(block)
             block_hash = block["id"]
             block_height = block["height"]
             coinbase_raw_transaction = self.provider.get_raw_coinbase_transaction(
@@ -91,14 +93,14 @@ if __name__ == "__main__":
         "--network",
         "-n",
         type=str,
-        default="testnet",
+        default="testnet4",
         help="Network (e.g., testnet or mainnet)",
     )
     parser.add_argument(
         "--target",
         "-t",
         type=str,
-        default="stratum v2",
+        default="Stratum V2",
         help="Target string to search in miner input",
     )
     parser.add_argument(
@@ -113,7 +115,7 @@ if __name__ == "__main__":
     network = args.network
     target_string = args.target
     n_previous_blocks = args.previous
-    provider = BlockstreamProvider(network=network)
+    provider = MempoolProvider(network=network)
     telegram_writer = TelegramWriter()
     discord_writer = DiscordWriter()
     coinbase_analyzer = CoinbaseAnalyzer(
