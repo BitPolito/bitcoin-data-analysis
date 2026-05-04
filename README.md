@@ -64,9 +64,18 @@ nano .env
 Webpage built with streamlit, that displays some live statistics about bitcoin network. Try it [here](https://bumblebee00-data-analysis-on-chain-kk5uep.streamlit.app/)
 
 ### Run the dashboard
+
+**With Poetry:**
+poetry run streamlit run dashboard/On-chain.py
+**With pip (without Poetry):**
+
+Make sure to run this command from the **project root**, not from inside the `dashboard/` folder:
+
+```bash
+streamlit run dashboard/On-chain.py
 ```
-    poetry run streamlit run dashboard/On-chain.py
-```
+
+> ⚠️ Running `streamlit run On-chain.py` from inside the `dashboard/` folder will cause a `FileNotFoundError`.
 
 Access the [streamlit](https://streamlit.io/) web page in your browser at http://localhost:8501.
 
